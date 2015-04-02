@@ -1,0 +1,22 @@
+T00322100224318000057390011501011501311501302241    89204598     141231+000000000000062806000039EURK{ytt|tili                    000000000000000000VELHOKOULU OY                      Nordea Pankki Suomi Oyj Y-tunn 1680235-81439 Tampere-Hervanta                                                 FI1022431800005739 NDEAFIHH
+T10188000001150107258883F512421501071501071501072730Palvelumaksu                       -000000000000001162EJNORDEA PANKKI SUOMI OYJ            J
+T110780601.12.-31.12.2014
+T10188000001150107258883F512421501070000001501072730Palvelumaksu                       -000000000000000075 JNORDEA PANKKI SUOMI OYJ            J                                           1
+T1118300Konekielinen tiliote               224318-5739                        Tiliote, TITO                    *)      1 kpl a    0,750 e       0,75*) alv rek. 0%
+T10188000001150107258883F512421501070000001501072730Palvelumaksu                       -000000000000000405 JNORDEA PANKKI SUOMI OYJ            J                                           1
+T1125300Konttoripalvelut                   224318-5739                        Viitteett|m{t panot              *)      1 kpl a    0,550 e       0,55Tiliotteet                       *)      1 kpl a    3,500 e       3,50*) alv rek. 0%
+T10188000001150107258883F512421501070000001501072730Palvelumaksu                       -000000000000000060 JNORDEA PANKKI SUOMI OYJ            J                                           1
+T1125300Yrityksen verkkopankki, maksut     224318-5739                        Verkkomaksut Nordeaan            *)      1 kpl a    0,200 e       0,20Verkkomaksut muihin pankkeihin   *)      2 kpl a    0,200 e       0,40*) alv rek. 0%
+T10188000001150107258883F512421501070000001501072730Palvelumaksu                       -000000000000000622 JNORDEA PANKKI SUOMI OYJ            J                                           1
+T1121800Verkkopankkisopimus/yritys         Liittym{maksu                    *)      1 kpl a    6,000 e       6,00Tapahtumakysely                  *)      2 kpl a    0,110 e       0,22*) alv rek. 0%
+T40050150107+000000000000061644+000000000000000000
+T50067115010700000000+00000000000000000000000001-000000000000001162
+T101880000021501122588NGRV05421501121501121501121705Viitemaksu                         +000000000000004200 AVELHO JUMAL                        J               00000000000000000013         
+T101880000031501122588NGN907421501121501121501121705Viitemaksu                         +000000000000000800 AVELHO MESTARI                      J               00000000000000000026
+T40050150112+000000000000063244+000000000000000000
+T50067115011200000002+00000000000000160000000000+000000000000000000
+T10188000006150113258877BO10421501131501131501131710S{{st|lipas                        +000000000000004200 ANORDEA LP C1 TAMPERE               J
+T1104300280002974984
+T10188000017150207478730IB85421502101502101502071710Pano                               +000000000000000800  OPPIPOIKA PYSTYV[                  A                                            
+T1104300OPPIRAHAT 2015                     
+T1132311                                                                                                                                                                                                                                                                                        20150207478730IB8551               
