@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 """
 A small program for parsing (Nordea formatted) TITO output from business online bank.
@@ -74,7 +75,7 @@ class Payment():
 
     def __init__(self):
         self.datetime = datetime(year=1970, month=1, day=1)
-        self.amount = float(0.0)
+        self.amount = int(0)
         self.payer = str()
         self.reference = str()
         self.message = str()
@@ -88,13 +89,13 @@ class Payment():
         payment_row = rows[0]
 
         str_datetime = payment_row[42:48].strip()
-        str_amount = payment_row[87:106].strip()
+        str_amount = re.sub(r'[,.]', '', payment_row[87:106].strip())
         str_payer = payment_row[108:143].strip()
         str_reference = payment_row[160:179].strip().lstrip('0')
 
         payment = Payment()
         payment.datetime = datetime.strptime(str_datetime, '%y%m%d')
-        payment.amount = float(str_amount) / 100.0
+        payment.amount = int(str_amount)
         payment.payer = str_payer
         payment.reference = str_reference
 
@@ -156,7 +157,7 @@ def main():
 
     if transactions:
         payments = map(Payment.parse_from_list, transactions)
-        with open(options.output, mode='w') as f:
+        with open(options.output, encoding='utf-8', mode='w') as f:
             writer = csv.DictWriter(f, fieldnames=Payment.DICT_FIELDS)
             writer.writeheader()
             for p in payments:
