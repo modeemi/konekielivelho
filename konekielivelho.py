@@ -32,25 +32,26 @@ import csv
 from datetime import datetime
 from optparse import OptionParser
 
-__author__ = 'Aleksi Häkli'
-__copyright__ = 'Aleksi Häkli'
-__license__ = 'MIT'
-__version__ = '0.1.0'
-__date__ = '2015-04-02'
-__status__ = 'MVP'
+__author__ = "Aleksi Häkli"
+__copyright__ = "Aleksi Häkli"
+__license__ = "MIT"
+__version__ = "0.1.0"
+__date__ = "2015-04-02"
+__status__ = "MVP"
 
 
-class BankEventType():
-    HEADER = 'T00'
-    TRANSACTION = 'T10'
-    SPECIFICATION = 'T11'
-    BALANCE = 'T40'
-    CUMULATIVE = 'T50'
+class BankEventType:
+    HEADER = "T00"
+    TRANSACTION = "T10"
+    SPECIFICATION = "T11"
+    BALANCE = "T40"
+    CUMULATIVE = "T50"
 
-    DESCRIPTION_MATCHER = re.compile(r'^T11...00.*$', flags=re.MULTILINE)
+    DESCRIPTION_MATCHER = re.compile(r"^T11...00.*$", flags=re.MULTILINE)
     NOT_INTERESTING_MATCHER = re.compile(  # Sanitize some unnecessary fields aside payments
-        r'^.*(PALVELUMAKSU|S.*ST.*LIPAS|ITSEPALVELU).*$'
-        , flags=re.IGNORECASE | re.MULTILINE)
+        r"^.*(PALVELUMAKSU|S.*ST.*LIPAS|ITSEPALVELU).*$",
+        flags=re.IGNORECASE | re.MULTILINE,
+    )
 
     @staticmethod
     def is_transaction(string):
@@ -65,13 +66,13 @@ class BankEventType():
         return not re.match(BankEventType.NOT_INTERESTING_MATCHER, string)
 
 
-class Payment():
+class Payment:
     """
     A simple class for manazing serialization and deserialization of payment objects.
     Add any processing logic to parse_from_list you might require.
     """
 
-    DICT_FIELDS = ['datetime', 'amount', 'payer', 'reference', 'message']
+    DICT_FIELDS = ["datetime", "amount", "payer", "reference", "message"]
 
     def __init__(self):
         self.datetime = datetime(year=1970, month=1, day=1)
@@ -82,19 +83,24 @@ class Payment():
 
     def __repr__(self):  # for readable print() with the object
         return '%s,%5.2f,%s,%s,"%s"' % (
-            self.datetime, self.amount, self.payer, self.reference or '', self.message)
+            self.datetime,
+            self.amount,
+            self.payer,
+            self.reference or "",
+            self.message,
+        )
 
     @staticmethod
     def parse_from_list(rows):
         payment_row = rows[0]
 
         str_datetime = payment_row[42:48].strip()
-        str_amount = re.sub(r'[,.]', '', payment_row[87:106].strip())
+        str_amount = re.sub(r"[,.]", "", payment_row[87:106].strip())
         str_payer = payment_row[108:143].strip()
-        str_reference = payment_row[160:179].strip().lstrip('0')
+        str_reference = payment_row[160:179].strip().lstrip("0")
 
         payment = Payment()
-        payment.datetime = datetime.strptime(str_datetime, '%y%m%d')
+        payment.datetime = datetime.strptime(str_datetime, "%y%m%d")
         payment.amount = int(str_amount)
         payment.payer = str_payer
         payment.reference = str_reference
@@ -103,12 +109,13 @@ class Payment():
         # assumes that input beyond first row
         # of bank transaction is always just the message.
         if len(rows) > 1:
+
             def parse_message(msg_string):
                 if len(msg_string) <= 8:
-                    return ''
+                    return ""
                 return msg_string[8::].strip()
 
-            payment.message = '\n'.join(map(parse_message, rows[1::]))
+            payment.message = "\n".join(map(parse_message, rows[1::]))
 
         return payment
 
@@ -120,18 +127,30 @@ def convert_ascii_alphabets(string):
     this function converts them to the Finnish / Scandic interpretation of the subset.
     """
 
-    substitutions = [(r'\]', 'Å'), (r'\[', 'Ä'), (r'\\', 'Ö'), (r'\}', 'å'), (r'\{', 'ä'), (r'\|', 'ö')]
+    substitutions = [
+        (r"\]", "Å"),
+        (r"\[", "Ä"),
+        (r"\\", "Ö"),
+        (r"\}", "å"),
+        (r"\{", "ä"),
+        (r"\|", "ö"),
+    ]
     for s in substitutions:
         string = re.sub(s[0], s[1], string)
     return string
 
+
 def main():
-    parser = OptionParser(usage='%prog [options]\n' + __doc__)
-    parser.add_option('-i', '--input', dest='input', help='TITO file to parse', default='input.tito')
-    parser.add_option('-o', '--output', dest='output', help='CSV file to output', default='output.csv')
+    parser = OptionParser(usage="%prog [options]\n" + __doc__)
+    parser.add_option(
+        "-i", "--input", dest="input", help="TITO file to parse", default="input.tito"
+    )
+    parser.add_option(
+        "-o", "--output", dest="output", help="CSV file to output", default="output.csv"
+    )
     (options, args) = parser.parse_args()
 
-    with open(options.input, mode='r') as f:
+    with open(options.input, mode="r") as f:
         filecontents = f.read()
 
     contents = convert_ascii_alphabets(filecontents).splitlines()
@@ -157,18 +176,26 @@ def main():
 
     if transactions:
         payments = map(Payment.parse_from_list, transactions)
-        with open(options.output, encoding='utf-8', mode='w') as f:
+        with open(options.output, encoding="utf-8", mode="w") as f:
             writer = csv.DictWriter(f, fieldnames=Payment.DICT_FIELDS)
             writer.writeheader()
             for p in payments:
                 writer.writerow(p.__dict__)
 
-        print('Wrote %d transactions parsed from %s to %s' % (
-            len(transactions), options.input, options.output))
+        print(
+            "Wrote %d transactions parsed from %s to %s"
+            % (len(transactions), options.input, options.output)
+        )
     else:
-        print('\n'.join([
-            'Input file did not have any interesting transactions, '
-            , 'cowardly refusing to produce an output file from such data.']))
+        print(
+            "\n".join(
+                [
+                    "Input file did not have any interesting transactions, ",
+                    "cowardly refusing to produce an output file from such data.",
+                ]
+            )
+        )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
